@@ -11,16 +11,16 @@ import {
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
+interface AutoLinkPluginSettings {
 	mySetting: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: AutoLinkPluginSettings = {
 	mySetting: "default",
 };
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class AutoLinkPlugin extends Plugin {
+	settings: AutoLinkPluginSettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -50,6 +50,7 @@ export default class MyPlugin extends Plugin {
 				new SampleModal(this.app).open();
 			},
 		});
+
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
 			id: "sample-editor-command",
@@ -59,6 +60,7 @@ export default class MyPlugin extends Plugin {
 				editor.replaceSelection("Sample Editor Command");
 			},
 		});
+
 		// This adds a complex command that can check whether the current state of the app allows execution of the command
 		this.addCommand({
 			id: "open-sample-modal-complex",
@@ -87,6 +89,11 @@ export default class MyPlugin extends Plugin {
 		// Using this function will automatically remove the event listener when this plugin is disabled.
 		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
 			console.log("click", evt);
+		});
+
+		this.registerDomEvent(document, "keydown", (event: KeyboardEvent) => {
+			if (/\s/.test(event.key)) {
+			}
 		});
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
@@ -127,9 +134,9 @@ class SampleModal extends Modal {
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: AutoLinkPlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: AutoLinkPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
